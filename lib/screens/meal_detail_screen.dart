@@ -94,11 +94,18 @@ class MealDetailScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          isFavourite(mealId) ? Icons.favorite : Icons.favorite_border,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(top: 70),
+        child: FloatingActionButton(
+          child: Icon(
+            isFavourite(mealId) ? Icons.favorite : Icons.favorite_border,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          backgroundColor: Colors.white,
+          //mini: true,
+          onPressed: () => toggleFavourite(mealId),
         ),
-        onPressed: () => toggleFavourite(mealId),
       ),
     );
   }
