@@ -18,35 +18,56 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Map<String, bool> _settings = {
-    'gluten':false,
-    'lactose':false,
-    'vegan':false,
-    'vegetarian':false,
+    'gluten': false,
+    'lactose': false,
+    'vegan': false,
+    'vegetarian': false,
   };
+
+  List<Meal> _favouriteMeals = [];
 
   List<Meal> _availableMeals = DUMMY_MEALS;
 
-  void _setSettings(Map<String, bool> settingsData){
+  void _setSettings(Map<String, bool> settingsData) {
     setState(() {
       _settings = settingsData;
 
-      _availableMeals = DUMMY_MEALS.where((meal){
-        if(_settings['gluten'] && !meal.isGlutenFree ){
+      _availableMeals = DUMMY_MEALS.where((meal) {
+        if (_settings['gluten'] && !meal.isGlutenFree) {
           return false;
         }
-        if(_settings['lactose'] && !meal.isLactoseFree ){
+        if (_settings['lactose'] && !meal.isLactoseFree) {
           return false;
         }
-        if(_settings['vegan'] && !meal.isVegan ){
+        if (_settings['vegan'] && !meal.isVegan) {
           return false;
         }
-        if(_settings['vegetarian'] && !meal.isVegetarian ){
+        if (_settings['vegetarian'] && !meal.isVegetarian) {
           return false;
         }
         return true;
       }).toList();
     });
   }
+
+  void _toggleFavourite(String mealId) {
+    final existingIndex =
+        _favouriteMeals.indexWhere((meal) => meal.id == mealId);
+    if(existingIndex >= 0){
+      setState(() {
+        _favouriteMeals.removeAt(existingIndex);
+      });
+    }else{
+      setState(() {
+        _favouriteMeals.add(DUMMY_MEALS.firstWhere((meal) => meal.id == mealId));
+      });
+    }
+  }
+
+  bool _isMealFav(String id){
+    return _favouriteMeals.any((meal) => meal.id == id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,10 +94,12 @@ class _MyAppState extends State<MyApp> {
       //home: CategoriesScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (ctx) => TabsScreen(),
-        CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(_availableMeals),
-        MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
-        SettingsScreen.routeName: (ctx) => SettingsScreen(_setSettings, _settings),
+        '/': (ctx) => TabsScreen(_favouriteMeals),
+        CategoryMealsScreen.routeName: (ctx) =>
+            CategoryMealsScreen(_availableMeals),
+        MealDetailScreen.routeName: (ctx) => MealDetailScreen(_toggleFavourite,_isMealFav),
+        SettingsScreen.routeName: (ctx) =>
+            SettingsScreen(_setSettings, _settings),
       },
       // onGenerateRoute: (settings){
       //   print(settings.arguments);
@@ -87,7 +110,7 @@ class _MyAppState extends State<MyApp> {
       //   }
       //   return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
       // },
-      onUnknownRoute: (settings){
+      onUnknownRoute: (settings) {
         //fallback page
         return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
       },

@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:meals_app/screens/settings_screen.dart';
+
+import '../screens/settings_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   Widget buildlistTile(String title, IconData icon, Function tapHandler) {
     return ListTile(
       leading: Icon(
         icon,
-        size: 26,
+        size: 24,
       ),
       title: Text(
         title,
         style: TextStyle(
             fontFamily: 'RobotoCondensed',
-            fontSize: 24,
-            fontWeight: FontWeight.bold),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            ),
       ),
       onTap: tapHandler,
     );
@@ -25,16 +27,16 @@ class MainDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            height: 120,
+            height: 150,
             width: double.infinity,
             padding: EdgeInsets.all(20),
             alignment: Alignment.centerLeft,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).primaryColorDark,
             child: Text(
               'Cooking UP!',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 30,
+                fontSize: 24,
                 color: Colors.white,
               ),
             ),
@@ -49,6 +51,7 @@ class MainDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed('/');
             },
           ),
+          Divider(),
           buildlistTile(
             'Settings',
             Icons.settings,
@@ -56,6 +59,7 @@ class MainDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(SettingsScreen.routeName);
             },
           ),
+          Divider(),
         ],
       ),
     );
