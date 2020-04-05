@@ -29,8 +29,21 @@ class _MyAppState extends State<MyApp> {
   void _setSettings(Map<String, bool> settingsData){
     setState(() {
       _settings = settingsData;
-      _availableMeals = DUMMY_MEALS.where((meal){
 
+      _availableMeals = DUMMY_MEALS.where((meal){
+        if(_settings['gluten'] && !meal.isGlutenFree ){
+          return false;
+        }
+        if(_settings['lactose'] && !meal.isLactoseFree ){
+          return false;
+        }
+        if(_settings['vegan'] && !meal.isVegan ){
+          return false;
+        }
+        if(_settings['vegetarian'] && !meal.isVegetarian ){
+          return false;
+        }
+        return true;
       }).toList();
     });
   }
@@ -63,7 +76,7 @@ class _MyAppState extends State<MyApp> {
         '/': (ctx) => TabsScreen(),
         CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(_availableMeals),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
-        SettingsScreen.routeName: (ctx) => SettingsScreen(_setSettings),
+        SettingsScreen.routeName: (ctx) => SettingsScreen(_setSettings, _settings),
       },
       // onGenerateRoute: (settings){
       //   print(settings.arguments);

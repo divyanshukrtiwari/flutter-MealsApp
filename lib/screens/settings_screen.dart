@@ -6,8 +6,9 @@ class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
 
   final Function saveSettings;
+  final Map<String, bool> settings;
 
-  SettingsScreen(this.saveSettings);
+  SettingsScreen(this.saveSettings, this.settings);
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -18,6 +19,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _vegetarian = false;
   bool _vegan = false;
   bool _lactoseFree = false;
+
+  @override
+  initState(){
+    super.initState();
+    _glutenFree = widget.settings['gluten'];
+    _lactoseFree = widget.settings['lactose'];
+    _vegan = widget.settings['vegan'];
+    _vegetarian = widget.settings['vegetarian'];
+  }
 
   Widget _buildSwitchListTile(
       String title, String description, bool currentVal, Function updateValue) {
@@ -37,7 +47,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'Settings',
         ),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.save), onPressed: widget.saveSettings)
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () {
+              final selectedSettings = {
+                'gluten': _glutenFree,
+                'lactose': _lactoseFree,
+                'vegan': _vegan,
+                'vegetarian': _vegetarian,
+              };
+              widget.saveSettings(selectedSettings);
+            },
+          ),
         ],
       ),
       drawer: MainDrawer(),
