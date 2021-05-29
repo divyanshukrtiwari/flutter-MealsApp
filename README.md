@@ -1,6 +1,6 @@
 # Recipes
 
-A mobile app which lets you browse through some delicios recipes
+A mobile app which lets you browse through some delicious recipes
 
 ## App Preview
 
